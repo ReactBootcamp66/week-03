@@ -1,24 +1,41 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
 
+import ThemeContext, { colors } from './contexts/ThemeContext';
+import SessionContext from './contexts/SessionContext';
+
+import useTimeout from './hooks/useTimeout';
+import Router from './Router';
+
 function App() {
+  const [theme, setTheme] = useState(colors.primary);
+  const [isAuthenticated, setAuthenticated] = useState(false);
+
+  useTimeout(() => {
+    console.log('Merhaba useTimeout');
+  }, 5);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeContext.Provider
+      value={{
+        theme,
+        setTheme,
+      }}
+    >
+      <SessionContext.Provider
+        value={{
+          isAuthenticated,
+          setAuthenticated,
+        }}
+      >
+        <div className="App">
+          <h1 className="App-header">Todo App</h1>
+          <div className="App-container">
+            <Router />
+          </div>
+        </div>
+      </SessionContext.Provider>
+    </ThemeContext.Provider>
   );
 }
 
